@@ -99,18 +99,26 @@ public class Main {
 				"                                                               ");
 		
 		int i=0;
-//		
-//		for (WebElement e : eList) {
-//			System.out.print(".");
-//			xMap.put("Element #" + i +" " + e.getTagName() + " "+ e.getAttribute("name"), generateXpath(e));
-//			i++;
-//		}
+		
+		for (WebElement e : eList) {
+			System.out.print(".");
+			xMap.put("Element #" + i +" " + e.getTagName() + " "+ e.getAttribute("name"), generateXpath(e));
+			i++;
+		}
+		
+		/*
+		 * 
+		 * 	 This code will print the entire DOM to console
 		
 		String javascript = "return arguments[0].innerHTML";
 		String pageSource=(String)((JavascriptExecutor)wd)
 		    .executeScript(javascript, wd.findElement(By.tagName("html")));
 		pageSource = "<html>"+pageSource +"</html>";
 		System.out.println(pageSource);
+		
+		
+		
+		 */
 
 		System.out.println("\n\n");
 		
