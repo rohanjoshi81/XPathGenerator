@@ -99,18 +99,18 @@ public class Main {
 				"                                                               ");
 		
 		int i=0;
+//		
+//		for (WebElement e : eList) {
+//			System.out.print(".");
+//			xMap.put("Element #" + i +" " + e.getTagName() + " "+ e.getAttribute("name"), generateXpath(e));
+//			i++;
+//		}
 		
-		for (WebElement e : eList) {
-			System.out.print(".");
-			xMap.put("Element #" + i +" " + e.getTagName() + " "+ e.getAttribute("name"), generateXpath(e));
-			i++;
-		}
-		
-//		String javascript = "return arguments[0].innerHTML";
-//		String pageSource=(String)((JavascriptExecutor)wd)
-//		    .executeScript(javascript, wd.findElement(By.tagName("html")));
-//		pageSource = "<html>"+pageSource +"</html>";
-//		System.out.println(pageSource);
+		String javascript = "return arguments[0].innerHTML";
+		String pageSource=(String)((JavascriptExecutor)wd)
+		    .executeScript(javascript, wd.findElement(By.tagName("html")));
+		pageSource = "<html>"+pageSource +"</html>";
+		System.out.println(pageSource);
 
 		System.out.println("\n\n");
 		
@@ -128,7 +128,7 @@ public class Main {
 	public static String generateXpath(WebElement e) {
 
 		if (e.getAttribute("id") != null && !e.getAttribute("id").equals(""))
-			return "//" + e.getTagName() + "[id='" + e.getAttribute("id") + "]'";
+			return "//" + e.getTagName() + "[@id='" + e.getAttribute("id") + "]'";
 		if (e.getTagName().equals("html"))
 			return "/html[1]";
 
