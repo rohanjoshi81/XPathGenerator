@@ -1,4 +1,4 @@
-package selenium;
+package generator;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class Main {
+public class App {
 	
 	static {
 	System.setProperty("webdriver.chrome.driver","D:\\chromedriver.exe");
