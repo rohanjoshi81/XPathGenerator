@@ -3,6 +3,7 @@ package selenium;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -13,15 +14,6 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Main {
-//	
-//	 public static ExpectedCondition<Boolean> angularHasFinishedProcessing() {
-//	        return new ExpectedCondition<Boolean>() {
-//	            public Boolean apply(WebDriver driver) {
-//	                return Boolean.valueOf(((JavascriptExecutor) driver).executeScript("return (window.angular !== undefined) && (angular.element(document).injector() !== undefined) && (angular.element(document).injector().get('$http').pendingRequests.length === 0)").toString());
-//	            }
-//	        };
-//	    }
-//	 
 	
 	static {
 	System.setProperty("webdriver.chrome.driver","D:\\chromedriver.exe");
@@ -68,7 +60,7 @@ public class Main {
 	
 	public static void main(String [] args)
 	{
-		String URL = "https://video.blender.org/videos/trending?sort=-trending&page=1";  // "http://www.google.com"
+		String URL = "http://192.168.172.20/main";  // "http://www.google.com"
 		
 		wd.manage().window().maximize();
 		
@@ -76,6 +68,15 @@ public class Main {
 		
 		wd.get(URL);
 		
+		waitForPageLoaded(wd);
+		
+		
+		// 2 CLICKS TO REACH A MENU 
+		
+		wd.findElement(By.xpath("//*[@id=\'first-level\']/div[2]/div[2]/a")).click();
+		
+		wd.findElement(By.xpath("//*[@id=\'second-level\']/div[2]/div[1]/a")).click(); // THIS IS THE MENU TO BE AUTMOATED
+		 
 		waitForPageLoaded(wd);
 			
 		List<WebElement> eList = wd.findElements(By.cssSelector("*"));
@@ -100,26 +101,16 @@ public class Main {
 		
 		int i=0;
 		
+		
+		// Limiting the generation for selected tags - 'INPUT', 'BUTTON', 'SELECT', 'TEXTAREA' , 'A' 
+		
 		for (WebElement e : eList) {
 			System.out.print(".");
-			xMap.put("Element #" + i +" " + e.getTagName() + " "+ e.getAttribute("name"), generateXpath(e));
+			if(Stream.of("INPUT", "BUTTON", "SELECT", "TEXTAREA", "A").anyMatch(e.getTagName()::equalsIgnoreCase))
+				xMap.put("Element#" + i +" " + e.getTagName() + " "+ (!e.getAttribute("name").equals("")?e.getAttribute("name"):e.getAttribute("id")), generateXpath(e));
 			i++;
 		}
 		
-		/*
-		 * 
-		 * 	 This code will print the entire DOM to console
-		
-		String javascript = "return arguments[0].innerHTML";
-		String pageSource=(String)((JavascriptExecutor)wd)
-		    .executeScript(javascript, wd.findElement(By.tagName("html")));
-		pageSource = "<html>"+pageSource +"</html>";
-		System.out.println(pageSource);
-		
-		
-		
-		 */
-
 		System.out.println("\n\n");
 		
 		xMap.forEach((k, v) -> System.out.println(k + "     " + v));
@@ -136,7 +127,7 @@ public class Main {
 	public static String generateXpath(WebElement e) {
 
 		if (e.getAttribute("id") != null && !e.getAttribute("id").equals(""))
-			return "//" + e.getTagName() + "[@id='" + e.getAttribute("id") + "]'";
+			return "//" + e.getTagName() + "[@id='" + e.getAttribute("id") + "']";
 		if (e.getTagName().equals("html"))
 			return "/html[1]";
 
@@ -170,51 +161,20 @@ public class Main {
 		return null;
 
 	}
-	
-//	public static void clickEQ()
-//	{
-//		/*
-//		 * WebDriverWait wait = new WebDriverWait(wd,10);    // Explicit wait by using Webdriverwait 
-//		 * 
-//		 * wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
-//		 * "//*[@id='first-level']/div[2]/div[2]/a")));
-//		 */
-//		
-//		wd.findElement(By.xpath("//*[@id='first-level']/div[2]/div[2]/a")).click();
-//	}
-//	
-//	public static void clickET()
-//	{
-//		/*
-//		 * WebDriverWait wait = new WebDriverWait(wd,10);
-//		 * 
-//		 * wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
-//		 * "//*[@id=\"second-level\"]/div[1]/div[1]/a")));
-//		 */
-//		
-//		wd.findElement(By.xpath("//*[@id=\"second-level\"]/div[1]/div[1]/a")).click();
-//		
-//	}
-//	
-//	public static void checkndelete()
-//	{
-//		WebElement check = wd.findElement(By.xpath("//*[@id='flat-box']/div/div/div/form/div[1]/div/div/div/div/div/f-data-grid/div[2]/div/div/p-table/div/div/div/div[2]/table/tbody/tr[1]/td[1]/f-grid-selector/p-tablecheckbox"));
-//		
-//		check.click();
-//		
-//		wd.findElement(By.xpath("//*[@id='action-button-Delete']/span")).click();
-//		
-//		/*
-//		 * WebDriverWait wait = new WebDriverWait(wd,10);
-//		 * 
-//		 * WebElement el =
-//		 * wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
-//		 * "//*[@id=\'yesButtonId\']/span[2]")));
-//		 */
-//		
-//		System.out.println("Deleting element with description "+wd.findElement(By.xpath("//*[@id=\"flat-box\"]/div/div/div/form/div[1]/div/div/div/div/div/f-data-grid/div[2]/div/div/p-table/div/div/div/div[2]/table/tbody/tr[1]/td[3]/f-grid-cell/div/div/input")).getText());
-//		
-//		wd.findElement(By.xpath("//*[@id=\'yesButtonId\']/span[2]")).click();
-//		
-//	}
 }
+
+
+/*
+ * 
+ * 	 This piece of code will print the entire DOM to console
+
+String javascript = "return arguments[0].innerHTML";
+String pageSource=(String)((JavascriptExecutor)wd)
+    .executeScript(javascript, wd.findElement(By.tagName("html")));
+pageSource = "<html>"+pageSource +"</html>";
+System.out.println(pageSource);
+
+
+
+ */
+	
